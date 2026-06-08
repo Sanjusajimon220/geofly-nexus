@@ -8,8 +8,8 @@ M.Sc. thesis project · Karlsruhe Institute of Technology (KIT) × GeoFly GmbH �
 
 > **Note on source code.** This repository documents the architecture, methodology, and
 > results of the project. The model code, training pipeline, and datasets are proprietary to
-> GeoFly GmbH and are not publicly available. The live platform and the figures below are
-> shared for portfolio and demonstration purposes.
+> GeoFly GmbH and are not publicly available. The live platform and this documentation are
+>  shared for portfolio and demonstration purposes.
 
 ---
 
