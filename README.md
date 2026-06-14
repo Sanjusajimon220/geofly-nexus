@@ -6,13 +6,14 @@ M.Sc. Remote Sensing & Geoinformatics, Karlsruhe Institute of Technology (KIT), 
 🌍 **Live GeoFly platform:** http://geofly-nexus-sanju.s3-website.eu-central-1.amazonaws.com/
 📄 **Portfolio (all projects):** https://sanjusajimon220.github.io/geofly-nexus/
 
-This repository hosts the portfolio site and supporting material for three projects:
+This repository hosts the portfolio site and supporting material for four projects:
 
-| Project | Domain | In this repo |
+| Project | Domain | In this repo / link |
 |---|---|---|
 | **GeoFly NEXUS** | Aerial imagery · semantic segmentation · production | `index.html` (case study) + live platform |
 | **PS-InSAR — La Palma** | Radar · Sentinel-1 · ground deformation | `SAR-INSAR_REPORT.pdf` |
 | **NDVI change detection — Amazon** | Optical satellite · Google Earth Engine | `deforestation_analysis.ipynb` |
+| **CropPulse** | SAR–optical fusion · agriculture · Google Earth Engine | [`Sanjusajimon220/croppulse`](https://github.com/Sanjusajimon220/croppulse) |
 
 ---
 
@@ -93,14 +94,41 @@ This project is as much a study in doing optical change detection *honestly* —
 
 ---
 
+## 4 · CropPulse — operational crop monitoring (Sentinel-1 × Sentinel-2 × ERA5)
+
+Radar sees through clouds. CropPulse uses Sentinel-1 to reconstruct the Sentinel-2 vegetation curve on cloudy days, turning gappy optical data into a continuous, operational crop monitor over an arable region of Lower Saxony, Germany. **Code:** [`Sanjusajimon220/croppulse`](https://github.com/Sanjusajimon220/croppulse).
+
+### Overview
+An end-to-end Google Earth Engine + Python pipeline that fuses three open Copernicus / ECMWF data streams — Sentinel-2 (optical), Sentinel-1 (radar) and ERA5-Land (weather). A model learns to predict optical NDVI from radar backscatter and fills the cloud gaps to produce a continuous greenness curve, which then drives four downstream services: cloud-gap-filled NDVI/LAI, per-field phenology, crop classification, and a drought monitor — plus a relative yield proxy. Built on EuroCrops field labels for the Hildesheim Börde, crop year 2021 (7 crops, 210 fields).
+
+### Key results
+- **Radar → NDVI gap-fill:** 5-fold CV **R² = 0.65** across 7 crops (gradient boosting with temporal lag/rolling features; RF baseline 0.57). Per-crop R² ranges from **0.81 (maize)** to **0.38 (winter barley)** — radar predicts greenness best for tall, structurally dynamic crops, consistent with the SAR literature.
+- **Crop classification:** **0.98** 5-fold CV accuracy over 7 crops; the few errors fall only between phenologically overlapping crops (summer row crops among themselves; barley ↔ rape) — i.e. only where a human agronomist would also hesitate.
+- **Phenology:** recovers seven distinct, agronomically correct crop calendars, including the correct ordering of winter barley being harvested before winter wheat.
+- **Drought monitor:** independently re-detects the two well-documented severe German droughts (**2018** and **2022**) from combined rainfall and NDVI anomalies.
+- **Yield proxy:** season-integrated NDVI ranks crops sensibly; quantitative validation against official district statistics is in progress.
+
+### How it works
+**SAR–optical fusion (the centerpiece).** Each Sentinel-1 acquisition is paired with the nearest clear Sentinel-2 NDVI; a gradient-boosted model maps `[VV, VH, VV–VH, temporal lag/rolling features, day-of-year, crop] → NDVI`, then predicts on every radar date to fill optical cloud gaps — the exact problem operational LAI services solve.
+
+**Downstream services.** From the gap-filled curves: start/peak/end-of-season phenology metrics; a Random-Forest crop classifier on the NDVI time series; multi-year growing-season drought anomalies (ERA5 rainfall deficit + NDVI anomaly); and a season-integrated-NDVI (iNDVI) yield proxy.
+
+### Data & method
+- **Data:** EuroCrops (field boundaries + harmonized crop labels, CC-BY-SA), Sentinel-1 GRD, Sentinel-2 SR, ERA5-Land — accessed via Google Earth Engine.
+- **Stack:** Google Earth Engine (Python API), scikit-learn (Random Forest, gradient boosting), pandas, NumPy, Matplotlib, SciPy.
+- **Reported honestly:** LAI is an empirical proxy (not a biophysical retrieval); results are for a single AOI / single year; classification uses a random split (spatial cross-validation is the rigorous next step); the yield indicator is relative and not yet calibrated against official yields.
+
+---
+
 ## Stack
-PyTorch · HuggingFace Transformers (SegFormer, BLIP) · GDAL · Rasterio · GeoPandas · laspy · Google Earth Engine · ESA SNAP · StaMPS · QGIS · Weights & Biases · Docker · AWS (S3, CloudFront) · CesiumJS · OGC services (WMS/WMTS/TMS)
+PyTorch · HuggingFace Transformers (SegFormer, BLIP) · scikit-learn · GDAL · Rasterio · GeoPandas · laspy · Google Earth Engine · ESA SNAP · StaMPS · QGIS · Weights & Biases · Docker · AWS (S3, CloudFront) · CesiumJS · OGC services (WMS/WMTS/TMS)
 
 ## Repository contents
-- `index.html` — portfolio site covering all three projects (served at the GitHub Pages URL above)
+- `index.html` — portfolio site covering all four projects (served at the GitHub Pages URL above)
 - `SAR-INSAR_REPORT.pdf` — full PS-InSAR technical report
 - `deforestation_analysis.ipynb` — corrected NDVI change-detection notebook (Google Earth Engine, Python)
 - `README.md` — this file
+- CropPulse code lives in its own repo: [`Sanjusajimon220/croppulse`](https://github.com/Sanjusajimon220/croppulse)
 
 ## Author
 **Sanju Sajimon** — Geospatial ML Engineer · Remote Sensing & Computer Vision
