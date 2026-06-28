@@ -5,12 +5,14 @@ M.Sc. Remote Sensing & Geoinformatics, Karlsruhe Institute of Technology (KIT), 
 
 🌍 **Live GeoFly platform:** http://geofly-nexus-sanju.s3-website.eu-central-1.amazonaws.com/
 📄 **Portfolio (all projects):** https://sanjusajimon220.github.io/geofly-nexus/
+🌡️ **Live Landsat map:** https://sanjusajimon220.github.io/land-surface-temperature-germany/
 
-This repository hosts the portfolio site and supporting material for four projects:
+This repository hosts the portfolio site and supporting material for five projects:
 
 | Project | Domain | In this repo / link |
 |---|---|---|
 | **GeoFly NEXUS** | Aerial imagery · semantic segmentation · production | `index.html` (case study) + live platform |
+| **Ground_truth — Germany LST** | Thermal satellite · land-surface temperature · Google Earth Engine | [`Sanjusajimon220/land-surface-temperature-germany`](https://github.com/Sanjusajimon220/land-surface-temperature-germany) + live map |
 | **PS-InSAR — La Palma** | Radar · Sentinel-1 · ground deformation | `SAR-INSAR_REPORT.pdf` |
 | **NDVI change detection — Amazon** | Optical satellite · Google Earth Engine | `deforestation_analysis.ipynb` |
 | **CropPulse** | SAR–optical fusion · agriculture · Google Earth Engine | [`Sanjusajimon220/croppulse`](https://github.com/Sanjusajimon220/croppulse) |
@@ -59,7 +61,26 @@ Tree is the honest weak point — canopy boundaries are genuinely ambiguous at 3
 
 ---
 
-## 2 · PS-InSAR — La Palma volcanic deformation
+## 2 · Ground_truth — a decade of Germany's summer land-surface temperature (Landsat 8/9 · Google Earth Engine)
+
+A decade of Germany's summer **ground** temperature, measured from space and rendered as a scrollable map — real surface heat, the urban heat-island effect, and how it has climbed, built entirely from free satellite data. **Live map:** https://sanjusajimon220.github.io/land-surface-temperature-germany/ · **Repo:** [`Sanjusajimon220/land-surface-temperature-germany`](https://github.com/Sanjusajimon220/land-surface-temperature-germany).
+
+### Overview
+A Google Earth Engine pipeline pulls every summer Landsat 8/9 Collection-2 thermal acquisition (band **ST_B10**) over Germany, takes the **per-pixel median** to form a typical summer surface, and clips it to the national outline. The result is published as a scrollytelling map (Leaflet) that moves through four readings of the same data: absolute ground temperature, the heat-island anomaly against the national mean, city and state rankings, and a year-by-year timelapse. Every pixel is a real measurement — clicking anywhere on the map reads the surface temperature back.
+
+### What it shows
+- **Urban heat-island signal** — built-up city cores run markedly hotter than the surrounding farmland and forest, the pattern that makes city nights dangerous during heat waves.
+- **Rankings** — all **16 Bundesländer** and the major cities ordered by their ten-year summer ground temperature.
+- **A decade in motion** — the surface played summer by summer from 2016 to 2026, with the in-progress 2026 season flagged as partial.
+
+### Data & method
+- **Data:** Landsat 8/9 Collection-2 Level-2 thermal band (ST_B10 → surface temperature), summer acquisitions only; 2016–2025 for the ten-year median, with 2026 shown as a partial, in-progress summer. Accessed via Google Earth Engine.
+- **Method:** per-pixel summer median over Germany → typical-summer surface, clipped to the national boundary; a heat-island layer subtracts the national mean; city and state values are sampled from the same grid; a decade timelapse animates the annual summer medians.
+- **Reported honestly:** land-surface (skin) temperature is **not** air temperature; each summer is a median of clear-sky Landsat passes, so cloud-persistent areas rest on fewer observations; the latest year is a partial season and is labelled as such.
+
+---
+
+## 3 · PS-InSAR — La Palma volcanic deformation
 
 Measuring millimetre-scale ground motion from space. Persistent-Scatterer InSAR on a four-year Sentinel-1 stack, tracking surface deformation across La Palma through the 2021 Cumbre Vieja eruption. **Full technical report:** [`SAR-INSAR_REPORT.pdf`](SAR-INSAR_REPORT.pdf).
 
@@ -75,7 +96,7 @@ Measuring millimetre-scale ground motion from space. Persistent-Scatterer InSAR 
 
 ---
 
-## 3 · NDVI change detection — Colombian Amazon reserve (Google Earth Engine)
+## 4 · NDVI change detection — Colombian Amazon reserve (Google Earth Engine)
 
 An end-to-end Earth Engine workflow for vegetation-change detection over the **Resguardo Indígena Llanos del Yarí (Yaguará II)** reserve. **Code:** [`deforestation_analysis.ipynb`](deforestation_analysis.ipynb) — a corrected, runnable GEE Python notebook.
 
@@ -94,7 +115,7 @@ This project is as much a study in doing optical change detection *honestly* —
 
 ---
 
-## 4 · CropPulse — operational crop monitoring (Sentinel-1 × Sentinel-2 × ERA5)
+## 5 · CropPulse — operational crop monitoring (Sentinel-1 × Sentinel-2 × ERA5)
 
 Radar sees through clouds. CropPulse uses Sentinel-1 to reconstruct the Sentinel-2 vegetation curve on cloudy days, turning gappy optical data into a continuous, operational crop monitor over an arable region of Lower Saxony, Germany. **Code:** [`Sanjusajimon220/croppulse`](https://github.com/Sanjusajimon220/croppulse).
 
@@ -121,14 +142,15 @@ An end-to-end Google Earth Engine + Python pipeline that fuses three open Copern
 ---
 
 ## Stack
-PyTorch · HuggingFace Transformers (SegFormer, BLIP) · scikit-learn · GDAL · Rasterio · GeoPandas · laspy · Google Earth Engine · ESA SNAP · StaMPS · QGIS · Weights & Biases · Docker · AWS (S3, CloudFront) · CesiumJS · OGC services (WMS/WMTS/TMS)
+PyTorch · HuggingFace Transformers (SegFormer, BLIP) · scikit-learn · GDAL · Rasterio · GeoPandas · laspy · Google Earth Engine · ESA SNAP · StaMPS · QGIS · Weights & Biases · Docker · AWS (S3, CloudFront) · CesiumJS · Leaflet · OGC services (WMS/WMTS/TMS)
 
 ## Repository contents
-- `index.html` — portfolio site covering all four projects (served at the GitHub Pages URL above)
+- `index.html` — portfolio site covering all five projects (served at the GitHub Pages URL above)
 - `SAR-INSAR_REPORT.pdf` — full PS-InSAR technical report
 - `deforestation_analysis.ipynb` — corrected NDVI change-detection notebook (Google Earth Engine, Python)
 - `README.md` — this file
 - CropPulse code lives in its own repo: [`Sanjusajimon220/croppulse`](https://github.com/Sanjusajimon220/croppulse)
+- Land-surface-temperature work lives in its own repo: [`Sanjusajimon220/land-surface-temperature-germany`](https://github.com/Sanjusajimon220/land-surface-temperature-germany) — live map + source
 
 ## Author
 **Sanju Sajimon** — Geospatial ML Engineer · Remote Sensing & Computer Vision
